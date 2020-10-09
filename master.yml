@@ -1,0 +1,19 @@
+- hosts: all
+  vars:
+    jenkins_version: "2.190"
+    jenkins_hostname: "{{ hostname }}"
+    jenkins_plugins:
+      - git
+      - sonar
+      - ssh
+      - ssh-slaves
+      - junit
+      - { name: "mattermost", version: "2.7.1" }
+
+  roles:
+    - role: geerlingguy.java
+      become: yes
+      java_packages:
+        - openjdk-8-jdk
+    - role: geerlingguy.jenkins
+      become: yes
