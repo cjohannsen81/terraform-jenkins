@@ -81,7 +81,7 @@ resource "aws_security_group" "default" {
 resource "aws_instance" "jenkins" {
   ami           = var.aws_amis[var.aws_region]
   instance_type = "t2.micro"
-  key_name      = "cjohannsen1981"
+  key_name      = var.keyname
   vpc_security_group_ids = [aws_security_group.default.id]
   tags = {
     Name = "Jenkins"
@@ -102,14 +102,14 @@ resource "aws_instance" "jenkins" {
   }
 
   provisioner "local-exec" {
-    command = "ansible-playbook --ssh-common-args='-o StrictHostKeyChecking=no' -u ubuntu --private-key /Users/cjohannsen/.ssh/cjohannsen1981.pem -i '${self.public_ip},'  master.yml --extra-vars 'hostname=${self.private_ip}'"
+    command = "ansible-playbook --ssh-common-args='-o StrictHostKeyChecking=no' -u ubuntu --private-key '${var.keypair}' -i '${self.public_ip},'  master.yml --extra-vars 'hostname=${self.private_ip}'"
   }
 
   connection {
     host = self.public_ip
     type     = "ssh"
     user     = "ubuntu"
-    private_key = file("/Users/cjohannsen/.ssh/cjohannsen1981.pem")
+    private_key = file(var.keypair)
   }
 }
 
