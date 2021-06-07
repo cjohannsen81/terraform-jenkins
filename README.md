@@ -13,3 +13,5 @@ terraform plan
 terraform apply
 
 IP plus Port 8080 = Jenkins
+
+added Azure DevOps pipeline
